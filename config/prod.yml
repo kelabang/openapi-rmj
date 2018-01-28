@@ -1,0 +1,5 @@
+dns: api.rumaji.com
+port: 80
+version: v1
+app:
+  url: http://${dns}/${version}

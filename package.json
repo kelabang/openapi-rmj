@@ -1,0 +1,51 @@
+{
+  "name": "rumaji",
+  "version": "1.0.0",
+  "description": "chain teller",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js",
+    "start-debug": "DEBUG=rumaji* node index.js",
+    "start-debug-watch": "DEBUG=rumaji* nodemon index.js --config nodemon.json",
+    "start": "node index.js",
+    "mista": "npm run migrate && npm run start",
+    "migrate": "rm dev.sqlite3 && knex migrate:latest --env development && knex seed:run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/kelabang/rumaji"
+  },
+  "keywords": [
+    "story"
+  ],
+  "author": "kelabang",
+  "license": "ISC",
+  "dependencies": {
+    "bookshelf": "^0.12.1",
+    "config-yml": "^0.8.0",
+    "fast-json-parse": "^1.0.3",
+    "fast-json-stringify": "^0.17.0",
+    "knex": "^0.14.2",
+    "knex-migrate": "^1.5.1",
+    "moment": "^2.20.1",
+    "restify": "^6.3.4",
+    "restify-model": "^0.3.2",
+    "sqlite3": "^3.1.13",
+    "swagger-parser": "^4.0.2",
+    "swagger-routes": "^1.7.0"
+  },
+  "devDependencies": {
+    "debug": "^3.1.0"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "*.test.js",
+      "*.yaml",
+      "*.json",
+      "*.yml",
+      "node_modules/*",
+      "*.sqlite3"
+    ],
+    "delay": "2500"
+  }
+}
