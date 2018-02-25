@@ -521,6 +521,36 @@ paths:
               $ref: '#/definitions/Feed'
         '400':
           description: Invalid status value
+  /user/subscribe:
+    post:
+      tags:
+        - user
+      summary: Subscribe new email
+      description: Register new email
+      operationId: subscribeEmail
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: Email need to subscribe
+          schema:
+            type: object
+            required:
+              - email
+            properties:
+              email:
+                type: string
+                example: kelabang@gmail.com
+      responses:
+        '200':
+          description: Subscribed
+        '405':
+          description: Invalid input
 securityDefinitions:
   JWT:
     description: Bearer token JWT
