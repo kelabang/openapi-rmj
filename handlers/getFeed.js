@@ -1,43 +1,38 @@
 /**
- * Update story from collection
+ * Get feed to timeline
  *
- * PUT: /v2/story/{storyId}
+ * GET: /v2/feed
  * 
- * path:
- *   storyId {int64} ID of story to return.
- *   
- * body:
- *   title {string}
- *   content {string}
- *   
  */
 
 const Debug = require('debug')
-const moment = require('moment')
-const Story = require('./../models/Story')
+const Feed = require('./../models/Feed')
 const pipeline = require('./../lib/promise/pipeline')
 const {createResponseHandler, getNameCaller} = require('./../helper/index')
 
 let debug
 
-exports.handler = function updateStory(req, res, next) {
-	
+exports.handler = function getFeed(req, res, next) {
 	const name = getNameCaller()
 	debug = Debug('rumaji:'+name)
 
 	function modelQuery () {
 		try {
-			debug('story updating')
-			const {storyId} = req.params
-			const {title, content} = req.body
-			return new Story({
-				id: storyId,
-				title,
-				content,
-			}).save()
+			debug('feed fetching')
+			return Feed
+				.fetchAll({
+					withRelated: ['user']
+				}).then(function (feeds) {
+					return feeds.map(function (feed) {
+						// console.log('feed : ', feed.user())
+						feed.set('user', feed.related('user'))
+						return feed
+					})
+				})
+
 		}
 		catch(err) {
-			debug('story update failed')
+			debug('feed fetch failed')
 			console.error(err)
 			return false
 		}
@@ -49,13 +44,14 @@ exports.handler = function updateStory(req, res, next) {
 		if(typeof data == 'boolean' && !data) code = 503
 		return {
 			code,
+			data,
 			name
 		}
 	}
 
 	function postResponseHandler(data) {
 		debug('post-response handler')
-		res.send(data.code, data)
+		res.send(data.code,data)
 		next()
 	}
 
@@ -66,5 +62,4 @@ exports.handler = function updateStory(req, res, next) {
 	]
 
 	return pipeline(tasks)
-
 }

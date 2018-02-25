@@ -1,43 +1,46 @@
 /**
- * Add a new story to the collection
+ * Register new user
  *
- * POST: /v2/story
+ * POST: /v2/user/registration
  * 
  * body:
- *   title {string}
- *   content {string}
+ *   username {string}
+ *   email {string}
+ *   password {string}
  *   
  */
-const Debug = require('debug')
-const _ = require('lodash')
 
-const Story = require('./../models/Story')
-const pipeline = require('./../lib/promise/pipeline')
-const {createResponseHandler, getNameCaller} = require('./../helper/index')
+ const Debug = require('debug')
+ const _ =  require('lodash')
+ const User = require('./../models/User')
+ const pipeline = require('./../lib/promise/pipeline')
+ const {createResponseHandler, getNameCaller} = require('./../helper/index')
 
-let debug
+ let debug
 
-exports.handler = function addStory(req, res, next) {
+exports.handler = function registerUser(req, res, next) {
 
 	const name = getNameCaller()
 	debug = Debug('rumaji:'+name)
 
 	function modelQuery () {
 		try {
-			debug('story creating')
-			const {title, content} = req.body
-			return new Story({
-				title,
-				content
+			debug('user registering')
+			const {username, email, password} = req.body
+			return new User({
+				username,
+				email,
+				password
 			}).save()
 			.catch(err => {
 				debug('catch in promise')
-				debug('story create failed')
+				debug('user register failed')
+				console.error(err)
 				return err
 			})
 		}
 		catch(err) {
-			debug('story create failed')
+			debug('user register failed')
 			console.error(err)
 			return false
 		}
@@ -45,12 +48,13 @@ exports.handler = function addStory(req, res, next) {
 
 	function preResponseHandler (data) {
 		debug('pre-response handler')
+
 		let code = 201
 		let toResponse = {name, code, data}
 		if(typeof data == 'boolean' && !data) _.assign(toResponse, {
 			code: 503, data: undefined
 		})
-		if(typeof data == 'object' && data.errno) _.assign(toResponse, {
+		if(typeof data == 'object' && (data.errno || Object.keys(data).length == 0)) _.assign(toResponse, {
 			code: 400, data: undefined
 		})
 		return toResponse
@@ -69,4 +73,5 @@ exports.handler = function addStory(req, res, next) {
 	]
 
 	return pipeline(tasks)
+
 }

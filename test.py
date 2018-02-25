@@ -8,11 +8,32 @@ url = url + '/v2'
 # test
 get(url+'/hello/imam')
 
+# users
+get(url+'/user')
+post(url+'/user/registration', 
+	{
+		'username': 'nooble1',
+		'password': '123654',
+		'email': 'imam.tauhid.dar1@icloud.com'
+	})
+
+#auth
+post(url+'/auth/facebook', 
+	{
+		'username': 'nooble1',
+		'password': '123654',
+		'email': 'imam.tauhid.dar1@icloud.com'
+	})
+
 # feeds
-get(url+'/feeds')
+get(url+'/feed')
 
 # stories
-get(url+'/story')
+get(
+	url+'/story',
+	headers={'Authorization':'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTE4Mjg2MzQ1LCJleHAiOjE1MTgyODk5NDUsImlzcyI6InJ1bWFqaS5jb20ifQ.nuykJjm1C4rxFaX4sHX1LBwrgr9uq-d5cgeTL1uDPLGbJgUZVdsRG4RTbyPPsRr0pUs_Xxoh1gdK0cikPni1F4VDmkoOIL-oxLKVnhXOb6FnqNQCRERlWd5_vs0CBTPiTA9DVbbLAJ5ougpDTqXIFsNQZf6lMeV7c3kqpfhYSuM4nCfDyXxh9PAlJclFtYLKuypi2Xzjj719eXBBJBt6Ju7cwKg--P6jeZxYXodRQuMO5_tHE3XQJWrmGEGoRZnqTIHKvqkL0_CHctZHJcVEPStgut3EWi7o5xGOiCHt86xbuwiHyoeMyj66E4mHrT41xDh-Ibg6WFfSSzyNFYATHA'},
+)
+
 get(url+'/story/find?title=hehe&status=draft')
 
 post(
@@ -31,8 +52,8 @@ post(
 })
 
 put(
-	url+'/story/8',
-	{'title': 'ubah 1', 'content': 'para para'}
+	url+'/story/2',
+	{'title': 'ubah 2', 'content': 'para para'}
 )
 
 post(

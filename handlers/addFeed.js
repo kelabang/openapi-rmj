@@ -1,48 +1,49 @@
 /**
- * Add a new story to the collection
+ * Add a new feed to timeline
  *
- * POST: /v2/story
+ * POST: /v2/feed
  * 
  * body:
- *   title {string}
  *   content {string}
+ *   type {int64}
  *   
  */
+
 const Debug = require('debug')
 const _ = require('lodash')
 
-const Story = require('./../models/Story')
+const Feed = require('./../models/Feed')
 const pipeline = require('./../lib/promise/pipeline')
 const {createResponseHandler, getNameCaller} = require('./../helper/index')
 
 let debug
 
-exports.handler = function addStory(req, res, next) {
+exports.handler = function addFeed(req, res, next) {
 
 	const name = getNameCaller()
 	debug = Debug('rumaji:'+name)
 
 	function modelQuery () {
 		try {
-			debug('story creating')
-			const {title, content} = req.body
-			return new Story({
-				title,
-				content
+			const {user_id} = req.body
+			const {type, content} = req.body
+			return new Feed({
+				type,
+				content,
+				user_id
 			}).save()
 			.catch(err => {
 				debug('catch in promise')
-				debug('story create failed')
+				debug('feed create failed')
 				return err
 			})
 		}
 		catch(err) {
-			debug('story create failed')
+			debug('feed create failed')
 			console.error(err)
 			return false
 		}
 	}
-
 	function preResponseHandler (data) {
 		debug('pre-response handler')
 		let code = 201
@@ -55,7 +56,6 @@ exports.handler = function addStory(req, res, next) {
 		})
 		return toResponse
 	}
-
 	function postResponseHandler(data) {
 		debug('post-response handler')
 		res.send(data.code,data)

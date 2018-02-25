@@ -20,6 +20,246 @@ tags:
 schemes:
   - http
 paths:
+  /oauth/authorize:
+    get:
+      tags:
+        - oauth
+      summary: Request link authorize
+      operationId: oauthAuthorize
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: query
+          name: client_id
+          type: string
+          description: The application's client ID (how the API identifies the application)
+        - in: query
+          name: redirect_uri
+          type: string
+          description: >-
+            Where the service redirects the user-agent after an authorization
+            code is granted
+        - in: query
+          name: response_type
+          type: string
+          description: >-
+            Specifies that your application is requesting an authorization code
+            grant
+        - in: query
+          name: scope
+          type: string
+          description: Specifies the level of access that the application is requesting
+      responses:
+        '200':
+          description: Success
+        '405':
+          description: Invalid input
+  /oauth/callback:
+    get:
+      tags:
+        - oauth
+      summary: Receive code authorization
+      operationId: oauthCallbackAuthorize
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: query
+          name: code
+          type: string
+          description: The code authorization from server
+      responses:
+        '200':
+          description: Success
+        '405':
+          description: Invalid input
+  /oauth/token:
+    get:
+      tags:
+        - oauth
+      summary: Request access token
+      operationId: oauthToken
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: query
+          name: client_id
+          type: string
+          description: The application's client ID (how the API identifies the application)
+        - in: query
+          name: client_secret
+          type: string
+        - in: query
+          name: grant_type
+          type: string
+        - in: query
+          name: code
+          type: string
+        - in: query
+          name: redirect_uri
+          type: string
+          description: >-
+            Where the service redirects the user-agent after an authorization
+            code is granted
+      responses:
+        '200':
+          description: Success
+        '405':
+          description: Invalid input
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Authentication with password
+      operationId: authPassword
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: The user to create.
+          schema:
+            type: object
+            required:
+              - user
+              - password
+            properties:
+              client_id:
+                type: string
+                example: '123'
+              grant_type:
+                type: string
+                example: password
+              user:
+                type: string
+                example: imam.tauhid.dar@gmail.com
+              password:
+                type: string
+                example: imamtauhid
+      responses:
+        '200':
+          description: Success
+        '405':
+          description: Invalid input
+  /auth/twitter:
+    post:
+      tags:
+        - auth
+      summary: Authentication with twitter
+      operationId: authTwitter
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: body
+          name: twitter
+          description: The twitter to create.
+          schema:
+            type: object
+            required:
+              - oauth_token
+              - oauth_token_secret
+            properties:
+              oauth_token:
+                type: string
+                example: kagSNqWge8gB1WwE3plnFsJHAZVfxWD7Vb57p0b4
+              oauth_token_secret:
+                type: string
+                example: PbKfYqSryyeKDWz4ebtY3o5ogNLG11WJuZBc9fQrQo
+      responses:
+        '200':
+          description: Success
+        '405':
+          description: Invalid input
+  /auth/facebook:
+    post:
+      tags:
+        - auth
+      summary: Authentication with facebook
+      operationId: authFacebook
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: body
+          name: facebook
+          description: The facebook to create.
+          schema:
+            type: object
+            required:
+              - accessToken
+              - userID
+            properties:
+              accessToken:
+                type: string
+                example: kagSNqWge8gB1WwE3plnFsJHAZVfxWD7Vb57p0b4
+              userID:
+                type: string
+                example: 123654
+      responses:
+        '200':
+          description: Success
+        '405':
+          description: Invalid input
+  /user/registration:
+    post:
+      tags:
+        - user
+      summary: Register new user
+      description: Register new user
+      operationId: registerUser
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: body
+          name: user
+          description: User object that needs to be register to the collection
+          schema:
+            type: object
+            required:
+              - username
+              - email
+              - password
+            properties:
+              username:
+                type: string
+                example: kelabang
+              email:
+                type: string
+                example: kelabang@gmail.com
+              password:
+                type: string
+                example: kelabangpassword
+      responses:
+        '201':
+          description: Created
+        '405':
+          description: Invalid input
   /story/find:
     get:
       tags:
@@ -110,6 +350,8 @@ paths:
               $ref: '#/definitions/Story'
         '400':
           description: Invalid status value
+      security:
+        - JWT: []
   '/story/{storyId}':
     put:
       tags:
@@ -219,46 +461,87 @@ paths:
           description: Drafted
         '405':
           description: Invalid input
+  /feed:
+    post:
+      tags:
+        - feed
+      summary: Add a new feed to timeline
+      description: feed on timeline
+      operationId: addFeed
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: body
+          name: feed
+          description: Feed object that needs tobe added to timeline
+          schema:
+            type: object
+            required:
+              - type
+              - content
+            properties:
+              content:
+                type: string
+                example: hari ini sangat panas
+              type:
+                type: integer
+                format: int64
+                example: 1
+      responses:
+        '200':
+          description: Successful operation
+        '201':
+          description: Feed created
+        '400':
+          description: Invalid status value
+      security:
+        - JWT: []
+    get:
+      tags:
+        - feed
+      summary: Get feed to timeline
+      description: feed to timeline
+      operationId: getFeed
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Feed'
+        '400':
+          description: Invalid status value
 securityDefinitions:
-  story_auth:
-    type: oauth2
-    authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
-    flow: implicit
-    scopes:
-      'write:stories': modify stories in your account
-      'read:stories': read your stories
-  api_key:
+  JWT:
+    description: Bearer token JWT
     type: apiKey
-    name: api_key
+    name: Authorization
     in: header
 definitions:
-  Order:
+  Feed:
     type: object
     properties:
       id:
         type: integer
         format: int64
-      petId:
-        type: integer
-        format: int64
-      quantity:
-        type: integer
-        format: int32
-      shipDate:
+      content:
         type: string
-        format: date-time
-      status:
+      created:
         type: string
-        description: Order Status
-        enum:
-          - placed
-          - approved
-          - delivered
-      complete:
-        type: boolean
-        default: false
-    xml:
-      name: Order
+      updated:
+        type: string
+      user:
+        $ref: '#/definitions/User'
   Category:
     type: object
     properties:
@@ -283,26 +566,18 @@ definitions:
         type: string
       email:
         type: string
-      password:
-        type: string
       phone:
         type: string
-      userStatus:
+      status:
         type: integer
         format: int32
-        description: User Status
+        description: '0 normal, 1 deactive, 2 suspend, 3 banned'
+      activation:
+        type: integer
+        format: int32
+        description: '0 not active, 1 active'
     xml:
       name: User
-  Tag:
-    type: object
-    properties:
-      id:
-        type: integer
-        format: int64
-      name:
-        type: string
-    xml:
-      name: Tag
   Story:
     type: object
     required:

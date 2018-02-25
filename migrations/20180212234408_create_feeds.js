@@ -1,21 +1,20 @@
 
 exports.up = function(knex, Promise) {
- 	return knex.schema.createTable('stories', function (t) {
+ 	return knex.schema.createTable('feeds', function (t) {
  		t.increments('id').unsigned().primary()
- 		// t.integer('id').notNullable().primary()
+
  		t.timestamp('created').defaultTo(knex.fn.now()).notNullable()
  		t.timestamp('deleted').nullable()
  		t.timestamp('updated').nullable()
 
- 		t.string('title').notNullable()
  		t.text('content').notNullable()
- 		t.enum('status', ['draft', 'published', 'deleted']).defaultTo('draft')
- 		t.integer('category_id').nullable()
+ 		t.integer('type').defaultTo(1).notNullable()
+
  		t.integer('user_id').unsigned()
  		t.foreign('user_id').references('Users.id')
  	})
 };
 
 exports.down = function(knex, Promise) {
-	return knex.schema.dropTable('stories') 
+	return knex.schema.dropTable('feeds') 
 };

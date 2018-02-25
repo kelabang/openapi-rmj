@@ -2,24 +2,23 @@
 * @Author: d4r
 * @Date:   2018-01-23 01:22:29
 * @Last Modified by:   Imam
-* @Last Modified time: 2018-02-01 22:03:44
+* @Last Modified time: 2018-02-23 22:32:39
 */
 
-const name = 'Story'
+const name = 'Feed'
 const debug = require('debug')('rumaji:'+name)
 const rules = {
-	"title": "required",
 	"content": "required"
 }
 const Checkit = require('checkit')
 const checkit = new Checkit(rules)
 const moment = require('moment')
 const bookshelf = require('./../bookshelf')
+const User = require('./User')
 
 
-
-const Story = bookshelf.Model.extend({
-	tableName: 'stories',
+const Feed = bookshelf.Model.extend({
+	tableName: 'feeds',
 	constructor: function () {
 		bookshelf.Model.apply(this, arguments)
 		this.on('creating', function (model, attrs, options) {
@@ -32,12 +31,14 @@ const Story = bookshelf.Model.extend({
 		})
 	},
 	validateCreate: function (attrs) {
-		debug('validate creating')
 		return checkit.run(attrs)
-			.caught(Checkit.Error, function(err) {
+			.catch(Checkit.Error, function(err) {
 				throw new Error(err)
 			})
+	},
+	user: function () {
+		return this.belongsTo(User)
 	}
 })
 
-module.exports = Story
+module.exports = Feed
