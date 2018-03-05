@@ -19,6 +19,7 @@ tags:
       url: 'http://docs.rumaji.com/story'
 schemes:
   - http
+  - https
 paths:
   /oauth/authorize:
     get:
@@ -549,6 +550,30 @@ paths:
       responses:
         '200':
           description: Subscribed
+        '405':
+          description: Invalid input
+  '/profile/{username}':
+    get:
+      tags:
+        - user
+      summary: Profile user
+      description: Get Profile User
+      operationId: profileUser
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: path
+          name: username
+          description: Username of user to return
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
         '405':
           description: Invalid input
 securityDefinitions:
