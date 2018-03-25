@@ -522,6 +522,33 @@ paths:
               $ref: '#/definitions/Feed'
         '400':
           description: Invalid status value
+  '/user/{userId}/follow':
+    post:
+      tags:
+        - user
+      summary: Follow user
+      description: Follow user
+      operationId: followUser
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: userId
+          description: User ID for following user
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Followed
+        '405':
+          description: Invalid input
+      security:
+        - JWT: []      
   /user/subscribe:
     post:
       tags:

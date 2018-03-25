@@ -7,6 +7,7 @@
     "test": "node test.js",
     "start-debug": "DEBUG=rumaji* node index.js",
     "start-debug-watch": "DEBUG=rumaji* nodemon index.js --config nodemon.json",
+    "start-debug-watch-windows": "set DEBUG=rumaji* &&  nodemon index.js --config nodemon.json",
     "start": "node index.js",
     "mista": "npm run migrate && npm run start",
     "migrate": "rm dev.sqlite3 && knex migrate:latest --env development && knex seed:run"
@@ -43,7 +44,8 @@
     "swagger-routes": "^1.7.0"
   },
   "devDependencies": {
-    "debug": "^3.1.0"
+    "debug": "^3.1.0",
+    "nodemon": "^1.17.1"
   },
   "nodemonConfig": {
     "ignore": [
