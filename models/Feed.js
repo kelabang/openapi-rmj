@@ -2,7 +2,7 @@
 * @Author: d4r
 * @Date:   2018-01-23 01:22:29
 * @Last Modified by:   Imam
-* @Last Modified time: 2018-02-23 22:32:39
+* @Last Modified time: 2018-04-22 15:27:44
 */
 
 const name = 'Feed'
@@ -41,4 +41,40 @@ const Feed = bookshelf.Model.extend({
 	}
 })
 
+const Feeds = bookshelf.Collection.extend({
+	model: Feed
+},{
+	feed: function (args) {
+		const {limit} = args
+		return this
+			.query(function (qb) {
+				qb.orderBy('created', 'DESC')
+				qb.limit(limit)
+			})
+			.fetch({
+				withRelated:[
+					"user"
+				]
+			})
+	},
+	feedMoreNext: function (args) {
+		console.error('feed more next, not implemented yet')
+	},
+	feedMorePrev: function (args) {
+		const {id, limit} = args
+		return this
+			.query(function (qb) {
+				qb.where('id', '<', id)
+				qb.orderBy('created', 'DESC')
+				qb.limit(limit)
+			})
+			.fetch({
+				withRelated: [
+					"user"
+				]
+			})
+	},
+})
+
 module.exports = Feed
+module.exports.collection = Feeds

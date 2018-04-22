@@ -3,10 +3,14 @@
  *
  * GET: /v2/feed
  * 
+ * query:
+ *   id {string} Feed id flag.
+ *   mode {string} Feed flow if next/prev flag.
+ *   
  */
 
 const Debug = require('debug')
-const Feed = require('./../models/Feed')
+const Feeds = require('./../models/Feed').collection
 const pipeline = require('./../lib/promise/pipeline')
 const {createResponseHandler, getNameCaller} = require('./../helper/index')
 
@@ -19,12 +23,27 @@ exports.handler = function getFeed(req, res, next) {
 	function modelQuery () {
 		try {
 			debug('feed fetching')
-			return Feed
-				.fetchAll({
-					withRelated: ['user']
-				}).then(function (feeds) {
+			const {
+				id,
+				mode
+			} = req.query
+
+			const limit = 15
+
+			let fn = '';
+			switch (mode) {
+				case 'next':
+					fn = 'feedMoreNext';
+				break;
+				case 'prev':
+					fn = 'feedMorePrev';
+				break;
+				default:
+					fn = 'feed';
+			}
+			return Feeds[fn]({id, limit})
+				.then(function (feeds) {
 					return feeds.map(function (feed) {
-						// console.log('feed : ', feed.user())
 						feed.set('user', feed.related('user'))
 						return feed
 					})

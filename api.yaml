@@ -504,6 +504,15 @@ paths:
     get:
       tags:
         - feed
+      parameters:
+        - in: query
+          name: id
+          type: string
+          description: Feed id flag.
+        - in: query
+          name: mode
+          type: string
+          description: Feed flow if next/prev flag.
       summary: Get feed to timeline
       description: feed to timeline
       operationId: getFeed
@@ -548,7 +557,7 @@ paths:
         '405':
           description: Invalid input
       security:
-        - JWT: []      
+        - JWT: []
   /user/subscribe:
     post:
       tags:

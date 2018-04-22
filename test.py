@@ -26,7 +26,8 @@ post(url+'/auth/facebook',
 	})
 
 # feeds
-get(url+'/feed')
+get(url+'/feed?id=30&mode=prev')
+get(url+'/feed?id=5')
 
 # stories
 get(
