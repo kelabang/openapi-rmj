@@ -72,7 +72,7 @@ module.exports = function JWT(req, res, next) {
         debug('verify token done')
         if(err) {
           debug('verify token failed', err)
-          return rej(new Error('cannot verify token'))
+          return res(new Error('cannot verify token'))
         }
         debug('verify token success')
         debug('payload', data)
