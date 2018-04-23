@@ -462,6 +462,42 @@ paths:
           description: Drafted
         '405':
           description: Invalid input
+  '/{username}/feed':
+    get:
+      tags:
+        - feed
+      parameters:
+        - in: path
+          name: username
+          type: string
+          required: true
+          description: username of feed owner
+        - in: query
+          name: id
+          type: string
+          description: Feed id flag
+        - in: query
+          name: mode
+          type: string
+          description: Feed flow if next/prev flag
+      summary: Feed of user
+      description: Retreive latest update feed of user
+      operationId: getUserFeed
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Feed'
+        '400':
+          description: Invalid status value
   /feed:
     post:
       tags:

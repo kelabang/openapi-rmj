@@ -2,7 +2,7 @@
 * @Author: d4r
 * @Date:   2018-01-23 01:22:29
 * @Last Modified by:   Imam
-* @Last Modified time: 2018-04-22 15:27:44
+* @Last Modified time: 2018-04-23 01:51:59
 */
 
 const name = 'Feed'
@@ -53,7 +53,9 @@ const Feeds = bookshelf.Collection.extend({
 			})
 			.fetch({
 				withRelated:[
-					"user"
+					{"user": (qb) => {
+						qb.column('username', 'id')
+					}},
 				]
 			})
 	},
@@ -70,10 +72,47 @@ const Feeds = bookshelf.Collection.extend({
 			})
 			.fetch({
 				withRelated: [
-					"user"
+					{"user": (qb) => {
+						qb.column('username', 'id')
+					}},
 				]
 			})
 	},
+	feeduser: function (args) {
+		const {id, limit, username} = args
+		return this
+			.query(function (qb) {
+				qb.innerJoin('users', 'feeds.user_id', 'users.id')
+				qb.where('users.username', username)
+				qb.orderBy('feeds.created', 'DESC')
+				qb.limit(limit)
+			})
+			.fetch({
+				withRelated: [
+					{"user": (qb) => {
+						qb.column('username', 'id')
+					}}
+				]
+			})
+	},
+	feeduserMorePrev: function (args) {
+		const {id, limit, username} = args
+		return this
+			.query(function (qb) {
+				qb.innerJoin('users', 'feeds.user_id', 'users.id')
+				qb.where('users.username', username)
+				qb.where('feeds.id', '<', id)
+				qb.orderBy('feeds.created', 'DESC')
+				qb.limit(limit)
+			})
+			.fetch({
+				withRelated: [
+					{"user": (qb) => {
+						qb.column('username', 'id')
+					}}
+				]
+			})
+	}
 })
 
 module.exports = Feed

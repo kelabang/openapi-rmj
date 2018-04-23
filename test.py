@@ -28,6 +28,10 @@ post(url+'/auth/facebook',
 # feeds
 get(url+'/feed?id=30&mode=prev')
 get(url+'/feed?id=5')
+get(url+'/ma4m/feed')
+
+#profile
+get(url+'/profile/ma4m')
 
 # stories
 get(
