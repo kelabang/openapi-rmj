@@ -256,6 +256,13 @@ paths:
               password:
                 type: string
                 example: kelabangpassword
+              ref_type:
+                type: integer
+                format: int64
+                example: '12'
+              ref_id:
+                type: string
+                example: '123123'
       responses:
         '201':
           description: Created
