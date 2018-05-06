@@ -7,6 +7,8 @@
  *   username {string}
  *   email {string}
  *   password {string}
+ *   ref_type {int64}
+ *   ref_id {string}
  *   
  */
 
@@ -26,12 +28,9 @@ exports.handler = function registerUser(req, res, next) {
 	function modelQuery () {
 		try {
 			debug('user registering')
-			const {username, email, password} = req.body
-			return new User({
-				username,
-				email,
-				password
-			}).save()
+			debug('incoming body ', req.body)
+			const {username, email, password, ref_id, ref_type} = req.body	
+			return User.registeringUser({username, email, password, ref_id, ref_type})
 			.catch(err => {
 				debug('catch in promise')
 				debug('user register failed')

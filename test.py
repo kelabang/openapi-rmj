@@ -18,11 +18,16 @@ post(url+'/user/registration',
 	})
 
 #auth
-post(url+'/auth/facebook', 
+post(url+'/auth/password', 
 	{
 		'username': 'nooble1',
 		'password': '123654',
 		'email': 'imam.tauhid.dar1@icloud.com'
+	})
+post(url+'/auth/facebook', 
+	{
+		"userID": "EAACluZBYteuEBAAAqk7kyH27FGjo0Q0JsaTvdJtjYogD2cyNwzZBHc7uZAnk0YXiXgrYrgXW9QiZB89vH1CgC1BZB82kZBSfJTQYYld6gaMBwvRkl3UY3QxxyJuL5Pnfd81mnvShEXGMX7gvXEnMEwfs668scz4NhjFgTjeIX83vepnW7wksSmdviqLZAniHhPZBQZCJva2ABhNkrfcmFLNZAX",
+		"accessToken": "106440456841960",
 	})
 
 # feeds

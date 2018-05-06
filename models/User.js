@@ -2,7 +2,7 @@
 * @Author: d4r
 * @Date:   2018-01-23 01:22:29
 * @Last Modified by:   Imam
-* @Last Modified time: 2018-02-22 00:24:03
+* @Last Modified time: 2018-05-06 18:27:24
 */
 
 const name = 'User'
@@ -21,7 +21,11 @@ const rules = {
 	"password": "required"
 }
 
-const User = bookshelf.Model.extend({
+let UserSocial,
+	User,
+	Users
+
+User = bookshelf.Model.extend({
 	tableName: 'users',
 	constructor: function () {
 		const self = this
@@ -45,6 +49,9 @@ const User = bookshelf.Model.extend({
 		this.on('saved', function (model, response, options) {
 			debug('on saved')
 			debug('remove password hash, prevent password exposed')
+			console.log('response', response)
+			console.log('model', model)
+			console.log('options', options)
 			this.set('password', undefined)
 		})
 	},
@@ -99,6 +106,67 @@ const User = bookshelf.Model.extend({
 		debug('validate creating')
 		return checkit(rules).run(attrs)
 	}
+}, {
+	registeringUser: function (attrs) {
+		const {
+			username, email, password, ref_id, ref_type
+		} = attrs
+		const user = new User({
+			username, email, password
+		})
+		return user.save()
+		.then(user => {
+			debug('attrs ', attrs)
+			debug('user ', user)
+			const user_id = user.get('id')
+			const usersoc = new UserSocial({
+				user_id: user_id,
+				social_id: ref_id,
+				social_type: ref_type
+			})
+
+			return usersoc
+				.save()
+				.then(resp => user)
+
+		})
+	}
+})
+
+UserSocial = bookshelf.Model.extend({
+	tableName: 'user_socials',
+	user: function () {
+		return this.belongsTo(User)
+	}
+}, {
+	getUserByFacebookId: function (facebookId) {
+		debug('getUserByFacebookId ',facebookId)
+		return UserSocial
+			.query(function (qb) {	
+				return qb.where('social_id', '=', facebookId)
+					.where('social_type', '=', 1)
+			})
+			.fetch()
+			.then(usersoc => {
+				debug('::-- response usersoc', usersoc)
+				if(!usersoc) {
+					debug('not account attached yet ')
+					return false
+				}
+				const {user_id} = usersoc.attributes 
+				return User.query(function (qb) {
+					qb.where('id', user_id)
+					qb.limit(1)
+				})
+				.fetch()
+			})
+	}
+})
+
+Users = bookshelf.Collection.extend({
+	model: User
 })
 
 module.exports = User
+module.exports.UserSocial = UserSocial
+module.exports.collection = Users

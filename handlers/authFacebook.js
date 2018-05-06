@@ -14,6 +14,7 @@ const _ =  require('lodash')
 const moment = require('moment')
 var {FB, FacebookApiException} = require('fb');
 const User = require('./../models/User')
+const UserSocial = require('./../models/User').UserSocial
 const Token = require('./../models/Token')
 const pipeline = require('./../lib/promise/pipeline')
 const {createResponseHandler, getNameCaller, JWT} = require('./../helper/index')
@@ -34,7 +35,9 @@ exports.handler = function authFacebook(req, res, next) {
 				{ fields: ['id', 'name', 'email'], access_token: accessToken }, 
 				function (res) {
 				    debug('response from facebook /me', res)
-				    const {id, name} = res
+				    const {id, name, error} = res
+				    if(error) 
+				    	debug('Third-party error')
 				    if(!id) return reject(res)
 				    debug('user authenticated')
 				    resolve(res)
@@ -47,11 +50,9 @@ exports.handler = function authFacebook(req, res, next) {
 		try {
 			debug('check if user already registered')
 			const {id, name, email} = facebook
-			return User.query(function (qb) {
-				return qb.where('email', '=',  email)
-			})
-			.fetch()
+			return UserSocial.getUserByFacebookId(id)
 			.then(user => {
+				console.log('return from get facebook id', user)
 				if(!user) {
 					debug('not registered yet')
 					facebook.thirdparty = true
