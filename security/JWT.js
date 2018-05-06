@@ -62,7 +62,10 @@ module.exports = function JWT(req, res, next) {
 
   function isValid (datatoken) {
     debug('is jwt valid ?')
-    if(!datatoken) throw new Error('token not found')
+    if(!datatoken) {
+      console.error('token not found')
+      return unAuthorize()
+    }
     const certificate_access_token = datatoken.get('certificate_access_token')
     const private_access_token = datatoken.get('private_access_token')
     debug('trying verify token')

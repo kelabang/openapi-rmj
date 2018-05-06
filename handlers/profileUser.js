@@ -39,6 +39,7 @@ exports.handler = function profileUser(req, res, next) {
 				})
 		}
 		catch(err){
+			console.error(err)
 			debug('profile user fetch failed')
 		}
 	}
