@@ -11,7 +11,11 @@ exports.up = function(knex, Promise) {
  		t.integer('type').defaultTo(1).notNullable()
 
  		t.integer('user_id').unsigned()
- 		t.foreign('user_id').references('Users.id')
+ 		t.foreign('user_id').references('users.id')
+
+ 		t.integer('feed_id').unsigned()
+ 		t.foreign('feed_id').references('feeds.id')
+
  	})
 };
 
