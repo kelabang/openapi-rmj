@@ -6,6 +6,7 @@
   "scripts": {
     "test": "node test.js",
     "start-debug": "DEBUG=rumaji* node index.js",
+    "start-debug-query": "DEBUG=knex:query node index.js",
     "start-debug-watch": "DEBUG=rumaji* nodemon index.js --config nodemon.json",
     "start-debug-watch-windows": "set DEBUG=rumaji* &&  nodemon index.js --config nodemon.json",
     "start": "node index.js",

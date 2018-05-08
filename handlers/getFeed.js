@@ -45,6 +45,7 @@ exports.handler = function getFeed(req, res, next) {
 				.then(function (feeds) {
 					return feeds.map(function (feed) {
 						feed.set('user', feed.related('user'))
+						feed.set('comments', feed.related('comments'))
 						return feed
 					})
 				})

@@ -34,6 +34,15 @@ post(url+'/auth/facebook',
 get(url+'/feed?id=30&mode=prev')
 get(url+'/feed?id=5')
 get(url+'/ma4m/feed')
+get(url+'/feed/1/comment')
+post(
+	url+'/feed/1/comment',
+	{
+		"content": "coba eueou ueoupdate",
+		"type": 1
+	},
+	headers={'Authorization':'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNTI1Nzk4MjQzLCJleHAiOjE1MjU4MDE4NDMsImlzcyI6InJ1bWFqaS5jb20ifQ.lN986wYZ4Iy_Flf5wugSxYmK7JneZ9Ji1P-7SFHW3VgNxJIMQdtlXvHpRI4gifWSohjDedoXeUU26tBg_U_vv7_c99dlrj8Yo3f5eDrnjKSMudXlEKwi5BSfJ0sdAEnnGjX_sbWoEJ9b6lLqv7gOxdDq8fnQ5bPyWVe7jAq0fFxRLEQDcGxNxajjJLhHRPBCpf8iX41jcEfcpzR-wF0CA0mZ16xVNl1xYOSNToU_nQ6o6pjmvddqIFnlDOzPm3NuCZA8sgeuJBb05fbJdPNMflXXW_DarePNTAN95BawVJ0AaY4xYBYPACqygZy1gdwww4lW62x8d1Z7VI0SBPD8Ag'},
+)
 
 #profile
 get(url+'/profile/ma4m')

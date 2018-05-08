@@ -505,6 +505,73 @@ paths:
               $ref: '#/definitions/Feed'
         '400':
           description: Invalid status value
+  '/feed/{feedId}/comment':
+    get:
+      tags:
+        - feed
+      summary: Get all comments on feed
+      description: retreive comment on feed
+      operationId: getCommentOnFeed
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: feedId
+          description: Id of feed
+          required: true
+          type: number
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid status value
+    post:
+      tags:
+        - feed
+      summary: Add a new comment to feed
+      description: comment on feed
+      operationId: addCommentOnFeed
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: feedId
+          description: Id of feed
+          required: true
+          type: number
+        - in: body
+          name: feed
+          description: Feed object that needs tobe added to timeline
+          schema:
+            type: object
+            required:
+              - type
+              - content
+            properties:
+              content:
+                type: string
+                example: hari ini sangat panas
+              type:
+                type: integer
+                format: int64
+                example: 1
+      responses:
+        '200':
+          description: Successful operation
+        '201':
+          description: Feed created
+        '400':
+          description: Invalid status value
+      security:
+        - JWT: []
   /feed:
     post:
       tags:
