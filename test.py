@@ -10,7 +10,7 @@ get(url+'/hello/imam')
 
 # users
 get(url+'/user')
-post(url+'/user/registration', 
+post(url+'/user/registration',
 	{
 		'username': 'nooble1',
 		'password': '123654',
@@ -18,30 +18,44 @@ post(url+'/user/registration',
 	})
 
 #auth
-post(url+'/auth/password', 
+post(url+'/auth/login', {
+	'user': 'haku@rumaji.com',
+	'password': '123654'
+})
+post(url+'/auth/password',
 	{
-		'username': 'nooble1',
+		'username': 'noodle',
 		'password': '123654',
-		'email': 'imam.tauhid.dar1@icloud.com'
+
 	})
-post(url+'/auth/facebook', 
+post(url+'/auth/facebook',
 	{
 		"userID": "EAACluZBYteuEBAAAqk7kyH27FGjo0Q0JsaTvdJtjYogD2cyNwzZBHc7uZAnk0YXiXgrYrgXW9QiZB89vH1CgC1BZB82kZBSfJTQYYld6gaMBwvRkl3UY3QxxyJuL5Pnfd81mnvShEXGMX7gvXEnMEwfs668scz4NhjFgTjeIX83vepnW7wksSmdviqLZAniHhPZBQZCJva2ABhNkrfcmFLNZAX",
 		"accessToken": "106440456841960",
 	})
+
+get(url+'/video/auth', {},
+	headers={'Authorization':'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTI4MDA1MjgwLCJleHAiOjE1MjgwMDg4ODAsImlzcyI6InJ1bWFqaS5jb20ifQ.gGbZ8Zq7REVSrw4flG4uKpowgMFPdfpfiNq5TEXB1tuE59lcO0L42LPlQwjzqbIKpXJLEIqpxfO63gLgb5S2BvxJb6QIRFKRnlU0My385MKmZbLNIy_jxYh6ynZemQMsqwcXnInwYov_MIBxVOUjKDnTF5aUtJ_LCIPMjLVCgCeTAJuWMnRdFjoAmv5sfAistsFVgUllUhlEbMWUZw-XqbEOr3C1wjkkDj_uAOYW2ghx99PGnOl724C-k6zpd0LYZ43pEH95th57h_djrgvuU20n5WDZBapNe61rgT4DZwH0MqquQPq8WjcRRmylWHZt4zjtqLtplByuvxcyvGZzIw'}
+)
 
 # feeds
 get(url+'/feed?id=30&mode=prev')
 get(url+'/feed?id=5')
 get(url+'/ma4m/feed')
 get(url+'/feed/1/comment')
+post(url+'/feed', {
+	"content": "update feed saat ini"
+	},
+	headers={
+		'Authorization': ''
+	})
 post(
 	url+'/feed/1/comment',
 	{
 		"content": "coba eueou ueoupdate",
 		"type": 1
 	},
-	headers={'Authorization':'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNTI1Nzk4MjQzLCJleHAiOjE1MjU4MDE4NDMsImlzcyI6InJ1bWFqaS5jb20ifQ.lN986wYZ4Iy_Flf5wugSxYmK7JneZ9Ji1P-7SFHW3VgNxJIMQdtlXvHpRI4gifWSohjDedoXeUU26tBg_U_vv7_c99dlrj8Yo3f5eDrnjKSMudXlEKwi5BSfJ0sdAEnnGjX_sbWoEJ9b6lLqv7gOxdDq8fnQ5bPyWVe7jAq0fFxRLEQDcGxNxajjJLhHRPBCpf8iX41jcEfcpzR-wF0CA0mZ16xVNl1xYOSNToU_nQ6o6pjmvddqIFnlDOzPm3NuCZA8sgeuJBb05fbJdPNMflXXW_DarePNTAN95BawVJ0AaY4xYBYPACqygZy1gdwww4lW62x8d1Z7VI0SBPD8Ag'},
+	headers={'Authorization':'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNTI4MDA1MjgwLCJleHAiOjE1MjgwMDg4ODAsImlzcyI6InJ1bWFqaS5jb20ifQ.gGbZ8Zq7REVSrw4flG4uKpowgMFPdfpfiNq5TEXB1tuE59lcO0L42LPlQwjzqbIKpXJLEIqpxfO63gLgb5S2BvxJb6QIRFKRnlU0My385MKmZbLNIy_jxYh6ynZemQMsqwcXnInwYov_MIBxVOUjKDnTF5aUtJ_LCIPMjLVCgCeTAJuWMnRdFjoAmv5sfAistsFVgUllUhlEbMWUZw-XqbEOr3C1wjkkDj_uAOYW2ghx99PGnOl724C-k6zpd0LYZ43pEH95th57h_djrgvuU20n5WDZBapNe61rgT4DZwH0MqquQPq8WjcRRmylWHZt4zjtqLtplByuvxcyvGZzIw'},
 )
 
 #profile
@@ -58,7 +72,7 @@ get(url+'/story/find?title=hehe&status=draft')
 post(
 	url+'/story',
 	{
-		'title': 'lorem ipsum', 
+		'title': 'lorem ipsum',
 		'content': """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lobortis risus id ante consequat, efficitur sollicitudin lacus tincidunt. Nulla luctus venenatis nibh eget tincidunt. Nullam efficitur, ipsum eu pulvinar commodo, libero eros aliquet turpis, id ultricies nulla mi quis sem. Pellentesque ultricies nisi vel nibh malesuada porttitor. Fusce viverra efficitur ultricies. Nam aliquam, diam sit amet efficitur consequat, erat elit dignissim ante, non congue massa quam sed mauris. Duis ac posuere metus. Vestibulum at sem in odio interdum rhoncus. Vestibulum tincidunt turpis eget dui maximus lacinia.
 
 			Suspendisse augue nulla, sagittis nec pellentesque vitae, dictum imperdiet risus. Etiam id feugiat quam. Pellentesque facilisis condimentum augue, non consectetur turpis. Maecenas molestie, neque quis condimentum hendrerit, ante eros viverra sem, nec rutrum sapien lectus sit amet velit. Nam elementum ante nisi. Aliquam ullamcorper velit a augue malesuada consequat. Aenean rutrum vehicula sapien, ac eleifend magna. Praesent rhoncus lacus id purus ultricies consectetur. Suspendisse quis varius nibh. Morbi ornare venenatis varius.

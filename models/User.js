@@ -2,7 +2,7 @@
 * @Author: d4r
 * @Date:   2018-01-23 01:22:29
 * @Last Modified by:   Imam
-* @Last Modified time: 2018-05-06 18:27:24
+* @Last Modified time: 2018-05-31 21:42:18
 */
 
 const name = 'User'
@@ -49,9 +49,7 @@ User = bookshelf.Model.extend({
 		this.on('saved', function (model, response, options) {
 			debug('on saved')
 			debug('remove password hash, prevent password exposed')
-			console.log('response', response)
-			console.log('model', model)
-			console.log('options', options)
+
 			this.set('password', undefined)
 		})
 	},

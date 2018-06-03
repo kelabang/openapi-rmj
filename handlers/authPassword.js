@@ -42,9 +42,11 @@ exports.handler = function authPassword(req, res, next) {
 					return user
 				}
 				debug('user registered')
+				debug('result of user ', user)
 				const _hash = user.get('password')
 				return user.comparePassword(password, _hash)
 					.then(isSame => {
+						debug('isSame ', isSame)
 						if(!isSame) throw new Error('incorrect password')
 						return user
 					})
@@ -101,13 +103,21 @@ exports.handler = function authPassword(req, res, next) {
 				}
 				return new Token(toSave)
 					.save()
-					.then(data => data.set('token', token))
+					.then(data => {
+						data.set('token', token)
+						data.set('private_access_token', '')
+						data.set('certificate_access_token', '')
+						debug('token', data)
+						return data
+					})
 			})
 			.catch(err => {
 				debug('catch in promise')
 				debug('authentication user failed')
 				console.error(err)
-				return err
+				return {
+					err: err
+				}
 			})
 		}
 		catch(err) {
@@ -126,6 +136,9 @@ exports.handler = function authPassword(req, res, next) {
 		})
 		if(typeof data == 'object' && data.errno) _.assign(toResponse, {
 			code: 400, data: undefined
+		})
+		if(typeof data == 'object' && data.err) _.assign(toResponse, {
+			code: 401, data: undefined, message: data.err
 		})
 		return toResponse
 	}

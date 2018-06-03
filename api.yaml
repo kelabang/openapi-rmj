@@ -722,6 +722,26 @@ paths:
           description: Success
         '405':
           description: Invalid input
+  /video/auth:
+    get:
+      tags:
+        - video
+      summary: Get link to upload
+      description: Server will provide the upload link
+      operationId: createVideoUpload
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      responses:
+        '200':
+          description: Success
+        '405':
+          description: Invalid input
+      security:
+        - JWT: []
 securityDefinitions:
   JWT:
     description: Bearer token JWT

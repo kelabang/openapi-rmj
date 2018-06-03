@@ -2,13 +2,23 @@
 * @Author: d4r
 * @Date:   2018-01-23 01:18:52
 * @Last Modified by:   Imam
-* @Last Modified time: 2018-01-31 00:34:48
+* @Last Modified time: 2018-05-31 19:06:09
 */
+// const knex = require('knex')({
+// 	client: 'sqlite3',
+// 	connection: {
+// 		filename: './dev.sqlite3',
+// 		useNullAsDefault: true
+// 	}
+// })
+
 const knex = require('knex')({
-	client: 'sqlite3',
+	client: 'mysql',
 	connection: {
-		filename: './dev.sqlite3',
-		useNullAsDefault: true
+		host : '127.0.0.1',
+		user : 'root',
+		password : '',
+		database : 'rumajidb'	
 	}
 })
 

@@ -11,7 +11,9 @@
     "start-debug-watch-windows": "set DEBUG=rumaji* &&  nodemon index.js --config nodemon.json",
     "start": "node index.js",
     "mista": "npm run migrate && npm run start",
-    "migrate": "rm dev.sqlite3 && knex migrate:latest --env development && knex seed:run"
+    "migrate": "rm dev.sqlite3 && knex migrate:latest --env development",
+    "migrate-staging": "knex migrate:latest --env staging && knex seed:run --env staging",
+    "migrate-rollback-staging": "knex migrate:rollback --env staging"
   },
   "repository": {
     "type": "git",
@@ -32,11 +34,14 @@
     "fast-json-stringify": "^0.17.0",
     "fb": "^2.0.0",
     "jsonwebtoken": "^8.1.1",
+    "jwplatform-api": "^0.1.0",
     "knex": "^0.14.2",
     "knex-migrate": "^1.5.1",
     "lodash": "^4.17.4",
     "moment": "^2.20.1",
+    "mysql": "^2.15.0",
     "pem": "^1.12.3",
+    "request": "^2.87.0",
     "restify": "^6.3.4",
     "restify-cors-middleware": "^1.1.0",
     "restify-model": "^0.3.2",
