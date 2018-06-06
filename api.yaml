@@ -722,10 +722,70 @@ paths:
           description: Success
         '405':
           description: Invalid input
+  '/feed/{feedId}/video':
+    put:
+      tags:
+        - feed
+      summary: Attach video to feed
+      description: Server will attach video to feed
+      operationId: attachVideoToFeed
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: path
+          name: feedId
+          type: number
+          required: true
+          description: id of feed
+        - in: body
+          name: video
+          description: video need to attach
+          schema:
+            type: object
+            required:
+              - size
+              - key
+              - source
+              - md5
+            properties:
+              source:
+                type: string
+                example: jwp
+              key:
+                type: number
+                example: 123123
+              md5:
+                type: string
+                example: ht4nt2d4n3
+              size:
+                type: number
+                example: 43279483
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Feed not found
+        '405':
+          description: Invalid input
+      security:
+        - JWT: []
   /video/auth:
     get:
       tags:
         - video
+      parameters:
+        - in: query
+          name: size
+          type: string
+          description: Size of file
+        - in: query
+          name: mime
+          type: string
+          description: Mime type of file
       summary: Get link to upload
       description: Server will provide the upload link
       operationId: createVideoUpload

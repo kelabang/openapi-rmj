@@ -6,6 +6,7 @@ const authors = require('./../migrations_function/table_authors')
 const publishers = require('./../migrations_function/table_publishers')
 const stories = require('./../migrations_function/table_stories')
 const books = require('./../migrations_function/table_books')
+const videos = require('./../migrations_function/table_videos')
 const details = require('./../migrations_function/proc_detail')
 
 exports.up = function(knex, Promise) {
@@ -19,6 +20,7 @@ exports.up = function(knex, Promise) {
 	schema = tokens.up(schema, fn)
 	schema = feeds.up(schema, fn)
 	schema = stories.up(schema, fn)
+	schema = videos.up(schema, fn)
 
 	schema = details.up(schema, fn)
 	
@@ -30,6 +32,7 @@ exports.down = function(knex, Promise) {
 	
 	schema = details.down(schema)
 
+	schema = videos.down(schema)
 	schema = stories.down(schema)
 	schema = books.down(schema)
 	schema = publishers.down(schema)

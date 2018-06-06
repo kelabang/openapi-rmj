@@ -3,6 +3,10 @@
  *
  * GET: /v2/video/auth
  * 
+ * query:
+ *   size {string} Size of file.
+ *   mime {string} Mime type of file.
+ *   
  */
 const Debug = require('debug')
 const _ = require('lodash')
@@ -19,12 +23,15 @@ exports.handler = function createVideoUpload(req, res, next) {
 	debug = Debug('rumaji:'+name)
 
 	function generateLink () {
-		debug('generateLink')
 		return new Promise (function (resolve, reject) {
-			JWP.generateVideoLinkUpload(function (err, data) {
+			const {size, mime} = req.params
+			const options = {size, mime}
+			JWP.generateVideoLinkUpload(options, function (err, data) {
 				if(err) return reject(err)
-				return resolve({url_upload: data})
+				let {query, fullpath} = data
+				return resolve({url_upload: fullpath, details: query})
 			})
+
 		})
 	}
 
