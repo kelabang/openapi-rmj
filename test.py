@@ -8,6 +8,18 @@ url = url + '/v2'
 # test
 get(url+'/hello/imam')
 
+# attach video to feed
+put(url+'/feed/1/video', 
+	{
+		'source': 'jwp',
+		'key': 'ga2iPJq1',
+		'md5': 'ec599ac8ad8f3f51815a0e0e573b0cca',
+		'size': 431282
+	}, 
+	headers={
+		'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNTI4MzkyMDM3LCJleHAiOjE1MjgzOTU2MzcsImlzcyI6InJ1bWFqaS5jb20ifQ.5aBr0sPo8EJU8oofA2KzUptS0S-Ig7ocAkQad9Ted0WjQxBgdVXrr9BNtb7qrPocOeQACCsZ3yH7xEWYbvSLbQjt8GkpXYUbxEt5XfF8Y1FDUDKQ12A-Y-vyiQfetezGx1jJDZN_FgsHuktfGFA8icoldOtSrPPTXaAXPWUUj4ojjS2f8jy-GXCU8FnArXBEyNEIWRsizgyPKU3i0IeKC_OfENWQC9pXJrIm1-ru0E4XHbAimaTkDpDniMfLcKiX85V5KZRqeWgZUDpBSku7LfOeX97kfhZT2eY2X_-4WXoc6FUDXY4LtHomA6_VMSeKMlMNdlR9zradWRwj01oOrQ'
+})
+
 # users
 get(url+'/user')
 post(url+'/user/registration',

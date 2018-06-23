@@ -2,7 +2,7 @@
 * @Author: d4r
 * @Date:   2018-01-23 01:22:29
 * @Last Modified by:   Imam
-* @Last Modified time: 2018-05-09 01:09:03
+* @Last Modified time: 2018-06-23 19:16:53
 */
 
 const name = 'Feed'
@@ -15,6 +15,8 @@ const checkit = new Checkit(rules)
 const moment = require('moment')
 const bookshelf = require('./../bookshelf')
 const User = require('./User')
+const Users = require('./User').collection
+const TagUserFeed = require('./Tag').TagUserFeed
 
 let Feeds
 const Feed = bookshelf.Model.extend({
@@ -37,10 +39,13 @@ const Feed = bookshelf.Model.extend({
 			})
 	},
 	user: function () {
-		return this.belongsTo(User)
+		return this.belongsTo(User, 'user_id')
 	},
-	comments: function () {
+	comments: function (qb) {
 		return this.hasMany(Feeds, 'feed_id')
+	}, 
+	mentions: function () {
+		return this.belongsToMany(Users).through(TagUserFeed, 'feed_id', 'user_id')
 	}
 })
 
@@ -51,8 +56,13 @@ Feeds = bookshelf.Collection.extend({
 		const {limit} = args
 		return this
 			.query(function (qb) {
-				qb.where('feed_id', null)
-				qb.orderBy('created', 'DESC')
+				qb.select([
+					'videos.*', 
+					'feeds.*', 
+					'videos.type as vtype'])
+				qb.leftJoin('videos','feeds.id', 'videos.feed_id')
+				qb.where('feeds.feed_id', null)
+				qb.orderBy('feeds.created', 'DESC')
 				qb.limit(limit)
 			})
 			.fetch({
@@ -61,8 +71,14 @@ Feeds = bookshelf.Collection.extend({
 						qb.column('username', 'id')
 					}},
 					"comments",
+					{"comments.mentions": (qb) => {
+						qb.column('username')
+					}},
 					{"comments.user": (qb) => {
 						qb.column('username', 'id')
+					}},
+					{"mentions": (qb) => {
+						qb.column(['username'])
 					}}
 				]
 			})
@@ -75,9 +91,11 @@ Feeds = bookshelf.Collection.extend({
 		const {id, limit} = args
 		return this
 			.query(function (qb) {
-				qb.where('id', '<', id)
-				qb.where('feed_id', null)
-				qb.orderBy('created', 'DESC')
+				qb.select(['videos.*', 'feeds.*', 'videos.type as vtype'])
+				qb.leftJoin('videos','feeds.id', 'videos.feed_id')
+				qb.where('feeds.id', '<', id)
+				qb.where('feeds.feed_id', null)
+				qb.orderBy('feeds.created', 'DESC')
 				qb.limit(limit)
 			})
 			.fetch({
@@ -88,6 +106,9 @@ Feeds = bookshelf.Collection.extend({
 					"comments",
 					{"comments.user": (qb) => {
 						qb.column('username', 'id')
+					}},
+					{"mentions": (qb) => {
+						qb.column(['username'])
 					}}
 				]
 			})
@@ -138,6 +159,8 @@ Feeds = bookshelf.Collection.extend({
 			})
 	}
 })
+
+
 
 module.exports = Feed
 module.exports.collection = Feeds

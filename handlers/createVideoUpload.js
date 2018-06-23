@@ -6,6 +6,7 @@
  * query:
  *   size {string} Size of file.
  *   mime {string} Mime type of file.
+ *   method {string} Method upload of video.
  *   
  */
 const Debug = require('debug')
@@ -24,8 +25,9 @@ exports.handler = function createVideoUpload(req, res, next) {
 
 	function generateLink () {
 		return new Promise (function (resolve, reject) {
-			const {size, mime} = req.params
-			const options = {size, mime}
+			const {size, mime, method} = req.query
+			const options = {size, mime, method}
+			debug('method generate options ', options)
 			JWP.generateVideoLinkUpload(options, function (err, data) {
 				if(err) return reject(err)
 				let {query, fullpath} = data
@@ -60,7 +62,7 @@ exports.handler = function createVideoUpload(req, res, next) {
 		preResponseHandler,
 		createResponseHandler(name, postResponseHandler)
 	]
-
+	
 	return pipeline(tasks)
 
 }

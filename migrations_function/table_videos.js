@@ -13,6 +13,7 @@ exports.up = function(schema, fn) {
 		t.integer('size', 50)
 		t.string('mime', 20)
 		t.text('md5')
+		t.text('key')
 		t.integer('feed_id').unsigned()
 		t.foreign('feed_id').references('feeds.id')
 

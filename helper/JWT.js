@@ -2,7 +2,7 @@
 * @Author: Imam
 * @Date:   2018-02-03 20:15:40
 * @Last Modified by:   Imam
-* @Last Modified time: 2018-02-10 00:18:59
+* @Last Modified time: 2018-06-11 04:32:08
 */
 
 const debug = require('debug')('rumaji:JWT')
@@ -15,7 +15,8 @@ const JWT = {
 	genParams: (issuer, expire, algorithm) => {
 		debug('generate params')
 		const iss = issuer || 'rumaji.com'
-		const exp = expire || 60*60
+		// const exp = expire || 60*60
+		const exp = expire || 1440*60
 		const alg = algorithm || 'RS256'
 		return {
 			algorithm: alg,

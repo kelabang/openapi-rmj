@@ -756,14 +756,14 @@ paths:
                 type: string
                 example: jwp
               key:
-                type: number
-                example: 123123
+                type: string
+                example: ga2iPJq1
               md5:
                 type: string
-                example: ht4nt2d4n3
+                example: ec599ac8ad8f3f51815a0e0e573b0cca
               size:
-                type: number
-                example: 43279483
+                type: string
+                example: 431282
       responses:
         '200':
           description: Success
@@ -786,6 +786,10 @@ paths:
           name: mime
           type: string
           description: Mime type of file
+        - in: query
+          name: method
+          type: string
+          description: Method upload of video
       summary: Get link to upload
       description: Server will provide the upload link
       operationId: createVideoUpload

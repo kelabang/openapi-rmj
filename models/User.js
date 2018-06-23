@@ -2,7 +2,7 @@
 * @Author: d4r
 * @Date:   2018-01-23 01:22:29
 * @Last Modified by:   Imam
-* @Last Modified time: 2018-05-31 21:42:18
+* @Last Modified time: 2018-06-21 21:52:49
 */
 
 const name = 'User'
@@ -163,6 +163,29 @@ UserSocial = bookshelf.Model.extend({
 
 Users = bookshelf.Collection.extend({
 	model: User
+}, {
+	checkValidUsernames: function (attrs) {
+		return Users.query(function (qb) {
+			let i = 0
+			do {
+				if(i == 0) 
+					qb.where('username', attrs[i])
+				else
+					qb.orWhere('username', attrs[i])
+				i++
+			}
+			while(i < attrs.length)
+		})
+		.fetch()
+		.then(function (data) {
+			return data.map(i => {
+				return {
+					username: i.get('username'),
+					id: i.get('id')
+				}
+			})
+		})
+	}
 })
 
 module.exports = User

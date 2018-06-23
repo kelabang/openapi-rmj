@@ -2,7 +2,7 @@
 * @Author: Imam
 * @Date:   2018-05-30 01:31:05
 * @Last Modified by:   Imam
-* @Last Modified time: 2018-05-30 03:12:24
+* @Last Modified time: 2018-06-20 22:09:36
 */
 
 exports.up = function(schema, fn) {
@@ -20,6 +20,7 @@ exports.up = function(schema, fn) {
 
  		t.integer('user_id').unsigned()
  		t.foreign('user_id').references('users.id')
+
  	})
 };
 

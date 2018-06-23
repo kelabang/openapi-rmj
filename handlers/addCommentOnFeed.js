@@ -14,8 +14,11 @@
 
 const Debug = require('debug')
 const _ = require('lodash')
+const extract = require('mention-hashtag')
 
 const Feed = require('./../models/Feed')
+const User = require('./../models/User').collection
+const TagUsersFeeds = require('./../models/Tag').TagUsersFeeds
 const pipeline = require('./../lib/promise/pipeline')
 const {createResponseHandler, getNameCaller} = require('./../helper/index')
 
@@ -37,6 +40,31 @@ exports.handler = function addCommentOnFeed(req, res, next) {
 				user_id,
 				feed_id
 			}).save()
+			.then(data => {
+				const extracted = extract(content, {unique: true, type: 'all'}) 
+				let {
+					mentions,
+					hashtags
+				} = extracted
+				mentions = mentions.map(item => item.replace('@', ''))
+				if(mentions.length < 1) return data
+				return User
+					.checkValidUsernames(mentions)
+					.then(filtered => {
+						let toAdd = []
+						if(filtered.length < 1) return data
+						filtered.map(item => {
+							toAdd.push({
+								feed_id: data.get('id'),
+								user_id: item.id
+							})
+						})
+						return TagUsersFeeds
+							.forge(toAdd)
+							.invokeThen('save')
+							.then(resp => data)
+					})
+			})
 			.catch(err => {
 				debug('catch in promise')
 				debug('feed create failed')

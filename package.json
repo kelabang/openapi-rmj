@@ -7,7 +7,7 @@
     "test": "node test.js",
     "start-debug": "DEBUG=rumaji* node index.js",
     "start-debug-query": "DEBUG=knex:query node index.js",
-    "start-debug-watch": "DEBUG=rumaji* nodemon index.js --config nodemon.json",
+    "start-debug-watch": "DEBUG=rumaji:* nodemon index.js --config nodemon.json",
     "start-debug-watch-windows": "set DEBUG=rumaji* &&  nodemon index.js --config nodemon.json",
     "start": "node index.js",
     "mista": "npm run migrate && npm run start",
@@ -38,6 +38,7 @@
     "knex": "^0.14.2",
     "knex-migrate": "^1.5.1",
     "lodash": "^4.17.4",
+    "mention-hashtag": "^1.1.1",
     "moment": "^2.20.1",
     "mysql": "^2.15.0",
     "pem": "^1.12.3",
@@ -47,7 +48,8 @@
     "restify-model": "^0.3.2",
     "sqlite3": "^3.1.13",
     "swagger-parser": "^4.0.2",
-    "swagger-routes": "^1.7.0"
+    "swagger-routes": "^1.7.0",
+    "urlencode": "^1.1.0"
   },
   "devDependencies": {
     "debug": "^3.1.0",
