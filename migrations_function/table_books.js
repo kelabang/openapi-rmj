@@ -6,9 +6,11 @@ exports.up = function(schema, fn) {
 		t.timestamp('created').defaultTo(fn.now()).notNullable()
 		t.timestamp('deleted').nullable()
 		t.timestamp('updated').nullable()
+		t.date('published').nullable()
 
 		t.string('title', 80).notNullable()
 		t.text('subtitle').nullable()
+		t.text('cover_url').nullable()
 		t.string('isbn', 20).nullable()
 		t.integer('page', 11).nullable()
 

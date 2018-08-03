@@ -469,6 +469,60 @@ paths:
           description: Drafted
         '405':
           description: Invalid input
+  /book:
+    get:
+      tags:
+        - book
+      summary: List of indexed Books
+      description: Retreive latest indexed books
+      operationId: getBook
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid status value
+  '/book/{isbn}/feed':
+    get:
+      tags:
+        - feed
+      parameters:
+        - in: path
+          name: isbn
+          type: string
+          required: true
+          description: isbn of book
+        - in: query
+          name: id
+          type: string
+          description: Feed id flag
+        - in: query
+          name: mode
+          type: string
+          description: Feed flow if next/prev flag
+      summary: Feed of book
+      description: Retrieve lastest update feed of book
+      operationId: getBookFeed
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/json
+        - application/xml
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Feed'
+        '400':
+          description: Invalid status value
   '/{username}/feed':
     get:
       tags:

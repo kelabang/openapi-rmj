@@ -2,7 +2,7 @@
 * @Author: d4r
 * @Date:   2018-01-23 01:22:29
 * @Last Modified by:   Imam
-* @Last Modified time: 2018-06-23 19:16:53
+* @Last Modified time: 2018-06-23 21:23:36
 */
 
 const name = 'Feed'
@@ -104,6 +104,9 @@ Feeds = bookshelf.Collection.extend({
 						qb.column('username', 'id')
 					}},
 					"comments",
+					{"comments.mentions": (qb) => {
+						qb.column('username')
+					}},
 					{"comments.user": (qb) => {
 						qb.column('username', 'id')
 					}},
