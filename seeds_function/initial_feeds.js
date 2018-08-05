@@ -7,8 +7,8 @@
 
 module.exports = function (knex) {
 	return knex('feeds').insert([
-		{id: 1, type:1, content: 'siang1 ini saya bertemu dengan kucing yang lucu, kemudian hujan datang', user_id: 1},
-		{id: 2, type:1, content: 'siang2 ini saya bertemu dengan kucing yang lucu, kemudian hujan datang', user_id: 1},
-		{id: 3, type:1, content: 'siang3 ini saya bertemu dengan kucing yang lucu, kemudian hujan datang', user_id: 1}
+		{id: 1, type:1, content: 'yuk, rutin baca buku', user_id: 2},
+		{id: 2, type:1, content: 'Haii, selamat datang di Rumaji!', user_id: 2},
+		{id: 3, type:1, content: 'Cuaca cerah ya', user_id: 1}
 	])
 } 
