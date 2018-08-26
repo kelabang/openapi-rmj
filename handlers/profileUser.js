@@ -8,7 +8,7 @@
  *   
  */
 const Debug = require('debug')
-const Profile = require('./../models/Profile')
+const User = require('./../models/User')
 const pipeline = require('./../lib/promise/pipeline')
 const {createResponseHandler, getNameCaller} = require('./../helper/index')
 
@@ -24,19 +24,9 @@ exports.handler = function profileUser(req, res, next) {
 			const {
 				username
 			} = req.params
-			return Profile
-				.query(function (qb) {
-					qb.innerJoin('users', 'profiles.user_id', 'users.id')
-					qb.where('users.username', username)
-					qb.limit(1)
-				})
-				.fetch({
-					withRelated:[
-						{"user": (qb) => {
-							qb.column('username', 'id')
-						}}
-					]
-				})
+
+			return User
+				.getProfileByUsername(username)
 		}
 		catch(err){
 			console.error(err)

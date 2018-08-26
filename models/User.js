@@ -23,7 +23,8 @@ const rules = {
 
 let UserSocial,
 	User,
-	Users
+	Users,
+	UserProfile
 
 User = bookshelf.Model.extend({
 	tableName: 'users',
@@ -103,6 +104,9 @@ User = bookshelf.Model.extend({
 	validateCreate: function (attrs) {
 		debug('validate creating')
 		return checkit(rules).run(attrs)
+	},
+	profile: function () {
+		return this.hasOne(UserProfile, 'user_id')
 	}
 }, {
 	registeringUser: function (attrs) {
@@ -128,6 +132,20 @@ User = bookshelf.Model.extend({
 				.then(resp => user)
 
 		})
+	},
+	getProfileByUsername: function (username) {
+		return User
+			.where('username', username)
+			.fetch()
+			.then(user => {
+				debug('user ', user)
+				const profile = user.profile()
+				debug('user profile', profile)
+				const payload = user.attributes
+				payload.password = undefined
+				payload.profile = profile
+				return payload
+			})
 	}
 })
 
@@ -161,6 +179,14 @@ UserSocial = bookshelf.Model.extend({
 	}
 })
 
+UserProfile = bookshelf.Model.extend({
+	tableName: 'profiles',
+	idAttribute: 'user_id',
+	user: function () {
+		return this.belongsTo(User)
+	}
+})
+
 Users = bookshelf.Collection.extend({
 	model: User
 }, {
@@ -191,3 +217,4 @@ Users = bookshelf.Collection.extend({
 module.exports = User
 module.exports.UserSocial = UserSocial
 module.exports.collection = Users
+module.exports.UserProfile = UserProfile
