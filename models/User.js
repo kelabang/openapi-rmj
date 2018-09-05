@@ -133,6 +133,20 @@ User = bookshelf.Model.extend({
 
 		})
 	},
+	getProfileById: function (id) {
+		return User	
+			.where('id', id)
+			.fetch()
+			.then(user => {
+				debug('user ', user)
+				const profile = user.profile()
+				debug('user profile', profile)
+				const payload = user.attributes
+				payload.password = undefined
+				payload.profile = profile
+				return payload
+			})
+	},
 	getProfileByUsername: function (username) {
 		return User
 			.where('username', username)

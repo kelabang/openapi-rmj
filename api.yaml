@@ -752,6 +752,26 @@ paths:
           description: Subscribed
         '405':
           description: Invalid input
+  /me:
+    get:
+      tags:
+        - user
+      summary: Profile Logged user
+      description: Get Profile Logged User
+      operationId: profileUserLogged
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      responses:
+        '200':
+          description: Success
+        '405':
+          description: Invalid input
+      security:
+        - JWT: []
   '/profile/{username}':
     get:
       tags:
