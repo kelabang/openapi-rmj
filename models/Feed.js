@@ -16,7 +16,9 @@ const moment = require('moment')
 const bookshelf = require('./../bookshelf')
 const User = require('./User')
 const Users = require('./User').collection
+const Books = require('./Book').collection
 const TagUserFeed = require('./Tag').TagUserFeed
+const TagBookFeed = require('./Tag').TagBookFeed
 
 let Feeds
 const Feed = bookshelf.Model.extend({
@@ -46,6 +48,9 @@ const Feed = bookshelf.Model.extend({
 	}, 
 	mentions: function () {
 		return this.belongsToMany(Users).through(TagUserFeed, 'feed_id', 'user_id')
+	},
+	books: function () {
+		return this.belongsToMany(Books).through(TagBookFeed, 'feed_id', 'book_id') 
 	}
 })
 
@@ -79,6 +84,9 @@ Feeds = bookshelf.Collection.extend({
 					}},
 					{"mentions": (qb) => {
 						qb.column(['username'])
+					}},
+					{"books": (qb) => {
+						qb.column(['title', 'isbn', 'isbn13'])
 					}}
 				]
 			})
@@ -112,6 +120,9 @@ Feeds = bookshelf.Collection.extend({
 					}},
 					{"mentions": (qb) => {
 						qb.column(['username'])
+					}},
+					{"books": (qb) => {
+						qb.column(['title', 'isbn', 'isbn13'])
 					}}
 				]
 			})

@@ -118,7 +118,6 @@ User = bookshelf.Model.extend({
 		})
 		return user.save()
 		.then(user => {
-			debug('attrs ', attrs)
 			debug('user ', user)
 			const user_id = user.get('id')
 			const usersoc = new UserSocial({
@@ -140,7 +139,6 @@ User = bookshelf.Model.extend({
 			.then(user => {
 				debug('user ', user)
 				const profile = user.profile()
-				debug('user profile', profile)
 				const payload = user.attributes
 				payload.password = undefined
 				payload.profile = profile
@@ -154,7 +152,6 @@ User = bookshelf.Model.extend({
 			.then(user => {
 				debug('user ', user)
 				const profile = user.profile()
-				debug('user profile', profile)
 				const payload = user.attributes
 				payload.password = undefined
 				payload.profile = profile

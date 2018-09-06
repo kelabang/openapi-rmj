@@ -46,7 +46,33 @@ Books = bookshelf.Collection.extend({
 					'publisher','author'
 				]
 			})
-	}
+	},
+	checkValidISBN: function (attrs) {
+		return Books.query(function (qb) {
+			let i = 0
+			do {
+				if (i == 0) {
+					qb.where('isbn', attrs[i])
+					qb.orWhere('isbn13', attrs[i])
+				}
+				else {
+					qb.orWhere('isbn', attrs[i])
+					qb.orWhere('isbn13', attrs[i])
+				}
+				i++
+			}
+			while (i < attrs.length)
+		})
+		.fetch()
+		.then(function (data) {
+			return data.map(i => {
+				return {
+					title: i.get('title'),
+					id: i.get('id')
+				}
+			})
+		})
+	} 
 })
 
 module.exports = Book
