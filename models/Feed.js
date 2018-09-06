@@ -82,6 +82,9 @@ Feeds = bookshelf.Collection.extend({
 					{"comments.user": (qb) => {
 						qb.column('username', 'id')
 					}},
+					{"comments.books": (qb) => {
+						qb.column(['title', 'isbn', 'isbn13'])
+					}},
 					{"mentions": (qb) => {
 						qb.column(['username'])
 					}},
@@ -117,6 +120,9 @@ Feeds = bookshelf.Collection.extend({
 					}},
 					{"comments.user": (qb) => {
 						qb.column('username', 'id')
+					}},
+					{"comments.books": (qb) => {
+						qb.column(['title', 'isbn', 'isbn13'])
 					}},
 					{"mentions": (qb) => {
 						qb.column(['username'])

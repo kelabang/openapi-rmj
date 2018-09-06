@@ -18,7 +18,9 @@ const extract = require('mention-hashtag')
 
 const Feed = require('./../models/Feed')
 const User = require('./../models/User').collection
+const Book = require('./../models/Book').collection
 const TagUsersFeeds = require('./../models/Tag').TagUsersFeeds
+const TagBooksFeeds = require('./../models/Tag').TagBooksFeeds
 const pipeline = require('./../lib/promise/pipeline')
 const {createResponseHandler, getNameCaller} = require('./../helper/index')
 
@@ -48,11 +50,11 @@ exports.handler = function addCommentOnFeed(req, res, next) {
 				} = extracted
 				mentions = mentions.map(item => item.replace('@', ''))
 				if(mentions.length < 1) return data
-				return User
+				const userp = User
 					.checkValidUsernames(mentions)
 					.then(filtered => {
 						let toAdd = []
-						if(filtered.length < 1) return data
+						if (filtered.length < 1) return data
 						filtered.map(item => {
 							toAdd.push({
 								feed_id: data.get('id'),
@@ -64,6 +66,29 @@ exports.handler = function addCommentOnFeed(req, res, next) {
 							.invokeThen('save')
 							.then(resp => data)
 					})
+				const bookp = Book
+					.checkValidISBN(mentions)
+					.then(filtered => {
+						let toAdd = []
+						if (filtered.length < 1) return data
+						filtered.map(item => {
+							toAdd.push({
+								feed_id: data.get('id'),
+								book_id: item.id
+							})
+						})
+						return TagBooksFeeds
+							.forge(toAdd)
+							.invokeThen('save')
+							.then(resp => data)
+					})
+				Promise.all([
+					userp,
+					bookp
+				]).then(([userresult, bookresult]) => {
+					return []
+				})
+				
 			})
 			.catch(err => {
 				debug('catch in promise')
