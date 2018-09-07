@@ -12,15 +12,9 @@
 // 	}
 // })
 
-const knex = require('knex')({
-	client: 'mysql',
-	connection: {
-		host : '127.0.0.1',
-		user : 'root',
-		password : '',
-		database : 'rumajidb'	
-	}
-})
+const config = require('./knexfile.js')
+
+const knex = require('knex')(config.staging)
 
 const bookshelf = require('bookshelf')(knex)
 bookshelf.plugin('pagination') // to use pagination `fetchPage`
