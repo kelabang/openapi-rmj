@@ -41,9 +41,7 @@ exports.handler = function getBook(req, res, next) {
           fn = 'book'
       }
 
-      const isbn13 = isbn
-
-  		return Books[fn]({id, title, isbn, isbn13})
+  		return Books[fn]({id, title, isbn})
 
   	}
   	catch (err) {

@@ -33,13 +33,15 @@ const Book = bookshelf.Model.extend({
 Books = bookshelf.Collection.extend({
 	model: Book
 }, {
-	book: function ({id, title, isbn, isbn13}) {
+	book: function ({id, title, isbn}) {
 		return this
 			.query(function (qb) {
 				if(id) qb.where('id', id)
-				if(isbn) qb.where('isbn', isbn)
 				if(title) qb.where('title', title)
-				if(isbn13) qb.where('isbn13', isbn13)
+				if (isbn) {
+					qb.where('isbn', isbn)
+					qb.orWhere('isbn13', isbn)
+				}
 				return qb
 			})
 			.fetch({
