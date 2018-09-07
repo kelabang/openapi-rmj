@@ -23,7 +23,6 @@ exports.handler = function getBook(req, res, next) {
         id,
         title,
         isbn,
-        isbn13,
         mode
       } = req.query
 
@@ -41,6 +40,8 @@ exports.handler = function getBook(req, res, next) {
         default: 
           fn = 'book'
       }
+
+      const isbn13 = isbn
 
   		return Books[fn]({id, title, isbn, isbn13})
 
