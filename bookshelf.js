@@ -18,5 +18,5 @@ const knex = require('knex')(config.staging)
 
 const bookshelf = require('bookshelf')(knex)
 bookshelf.plugin('pagination') // to use pagination `fetchPage`
-
+bookshelf.plugin('registry') // circular dependencies resolver
 module.exports = bookshelf

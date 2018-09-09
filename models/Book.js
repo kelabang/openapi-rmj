@@ -7,8 +7,9 @@
 
 const name = 'Book'
 const debug = require('debug')('rumaji:'+name)
-const moment = require('moment')
 const bookshelf = require('./../bookshelf')
+const Feeds = require('./Feed').collection // load feeds
+const TagBookFeed = require('./Tag').TagBookFeed
 
 let Books
 
@@ -27,6 +28,12 @@ const Book = bookshelf.Model.extend({
 	},
 	author: function () {
 		return this.belongsTo(Author, 'author_id')
+	},
+	feeds: function () {
+		return this
+			.belongsToMany('Feeds')
+			.through(TagBookFeed, 'book_id', 'feed_id')
+			
 	}
 })
 
@@ -47,6 +54,70 @@ Books = bookshelf.Collection.extend({
 			.fetch({
 				withRelated: [
 					'publisher','author'
+				]
+			})
+	},
+	feedbookMorePrev: function ({id, limit, isbn }) {
+		return this
+			.query(function (qb) {
+				qb.where('isbn', isbn)
+				qb.orWhere('isbn13', isbn)
+			})
+			.fetch({
+				withRelated: [
+					{"feeds": (qb) => {
+						qb.where('tag_feeds_books.feed_id', '<', id)
+						qb.orderBy('created', 'DESC')
+						qb.limit(limit)
+					}},
+					{
+						"feeds.mentions": (qb) => {
+							qb.column('username')
+						}
+					},
+					{
+						"feeds.user": (qb) => {
+							qb.column('username', 'id')
+						}
+					},
+					{
+						"feeds.books": (qb) => {
+							qb.column(['title', 'isbn', 'isbn13'])
+						}
+					}
+				]
+			})
+	},
+	feedbook: function ({id, limit, isbn}) {
+		debug('feed', isbn)
+		return this
+			.query(function (qb) {
+				qb.where('isbn', isbn)
+				qb.orWhere('isbn13', isbn)
+			})
+			.fetch({
+				withRelated: [
+					{
+						"feeds": (qb) => {
+							qb.orderBy('created', 'DESC')
+							qb.limit(limit)
+						}
+					},
+					{
+						"feeds.mentions": (qb) => {
+							qb.column('username')
+						}
+					},
+					{
+						"feeds.user": (qb) => {
+							qb.column('username', 'id')
+						}
+					},
+					{
+						"feeds.books": (qb) => {
+							qb.column(['title', 'isbn', 'isbn13'])
+						}
+					}
 				]
 			})
 	},
@@ -78,5 +149,5 @@ Books = bookshelf.Collection.extend({
 	} 
 })
 
-module.exports = Book
-module.exports.collection = Books
+module.exports = bookshelf.model('Book', Book)
+module.exports.collection = bookshelf.model('Books', Books)

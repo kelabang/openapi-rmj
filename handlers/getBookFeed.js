@@ -13,7 +13,7 @@
  */
 
  const Debug = require('debug')
- const Feeds = require('./../models/Feed').collection
+ const Books = require('./../models/Book').collection
  const pipeline = require('./../lib/promise/pipeline')
  const {createResponseHandler, getNameCaller} = require('./../helper/index')
 
@@ -30,26 +30,26 @@ exports.handler = function getBookFeed(req, res, next) {
 				id,
 				mode
 			} = req.query
-
+			const {
+				isbn
+			} = req.params
 			const limit = 15
 
 			let fn = '';
 			switch (mode) {
 				case 'next':
-					fn = 'feedMoreNext';
+					fn = 'feedbookMoreNext';
 					break;
 				case 'prev':
-					fn = 'feedMorePrev';
+					fn = 'feedbookMorePrev';
 					break;
 				default:
-					fn = 'feed';
+					fn = 'feedbook';
 			}
-			return Feeds[fn]({ id, limit })
-				.then(function (feeds) {
-					return feeds.map(function (feed) {
-						feed.set('user', feed.related('user'))
-						feed.set('comments', feed.related('comments'))
-						return feed
+			return Books[fn]({ id, limit, isbn })
+				.then(function (books) {
+					return books.map(function (book) {
+						return book
 					})
 				})
 

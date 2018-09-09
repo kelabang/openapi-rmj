@@ -225,7 +225,7 @@ Users = bookshelf.Collection.extend({
 	}
 })
 
-module.exports = User
-module.exports.UserSocial = UserSocial
-module.exports.collection = Users
-module.exports.UserProfile = UserProfile
+module.exports = bookshelf.model('User',User)
+module.exports.UserSocial = bookshelf.model('UserSocial',UserSocial)
+module.exports.collection = bookshelf.model('Users',Users)
+module.exports.UserProfile = bookshelf.model('UserProfile',UserProfile)

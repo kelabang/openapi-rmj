@@ -13,10 +13,14 @@ const rules = {
 const Checkit = require('checkit')
 const checkit = new Checkit(rules)
 const moment = require('moment')
+
 const bookshelf = require('./../bookshelf')
+
 const User = require('./User')
 const Users = require('./User').collection
+
 const Books = require('./Book').collection
+
 const TagUserFeed = require('./Tag').TagUserFeed
 const TagBookFeed = require('./Tag').TagBookFeed
 
@@ -50,7 +54,7 @@ const Feed = bookshelf.Model.extend({
 		return this.belongsToMany(Users).through(TagUserFeed, 'feed_id', 'user_id')
 	},
 	books: function () {
-		return this.belongsToMany(Books).through(TagBookFeed, 'feed_id', 'book_id') 
+		return this.belongsToMany('Books').through(TagBookFeed, 'feed_id', 'book_id') 
 	}
 })
 
@@ -133,6 +137,9 @@ Feeds = bookshelf.Collection.extend({
 				]
 			})
 	},
+	feedbook: function (args) {
+		return new Promise((rs, rj) => rs([]))
+	},
 	feeduser: function (args) {
 		const {id, limit, username} = args
 		return this
@@ -182,5 +189,5 @@ Feeds = bookshelf.Collection.extend({
 
 
 
-module.exports = Feed
-module.exports.collection = Feeds
+module.exports = bookshelf.model('Feed', Feed)
+module.exports.collection = bookshelf.model('Feeds', Feeds)
