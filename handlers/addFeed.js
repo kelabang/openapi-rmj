@@ -77,7 +77,7 @@ exports.handler = function addFeed(req, res, next) {
 							.invokeThen('save')
 							.then(resp => data)
 					})
-				Promise.all([
+				return Promise.all([
 					userp,
 					bookp
 				]).then(([userresult, bookresult]) => {

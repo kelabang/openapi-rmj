@@ -10,7 +10,7 @@
     "start-debug-watch": "DEBUG=rumaji:* nodemon index.js --config nodemon.json",
     "start-debug-watch-windows": "set DEBUG=rumaji* &&  nodemon index.js --config nodemon.json",
     "start": "node index.js",
-    "mista": "npm run migrate && npm run start", 
+    "mista": "npm run migrate && npm run start",
     "migrate": "rm dev.sqlite3 && knex migrate:latest --env development",
     "migrate-staging": "knex migrate:latest --env staging && knex seed:run --env staging",
     "migrate-rollback-staging": "knex migrate:rollback --env staging"
@@ -19,7 +19,7 @@
     "type": "git",
     "url": "github.com/kelabang/rumaji"
   },
-  "keywords": [ 
+  "keywords": [
     "story"
   ],
   "author": "kelabang",
@@ -41,6 +41,7 @@
     "mention-hashtag": "^1.1.1",
     "moment": "^2.20.1",
     "mysql": "^2.15.0",
+    "node-isbn": "^1.4.0",
     "pem": "^1.12.3",
     "request": "^2.87.0",
     "restify": "^6.3.4",

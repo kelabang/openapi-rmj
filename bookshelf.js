@@ -19,4 +19,44 @@ const knex = require('knex')(config.staging)
 const bookshelf = require('bookshelf')(knex)
 bookshelf.plugin('pagination') // to use pagination `fetchPage`
 bookshelf.plugin('registry') // circular dependencies resolver
+
+const BaseModel = bookshelf.Model.extend({}, {
+    /**
+     * Select a model based on a query
+     * @param {Object} selectData
+     * @param {Function} [callback]
+     * @return {Promise}
+     */
+    findOne: function (selectData, callback) {
+        return this.forge(selectData).fetch(callback);
+    },
+    /**
+     * @param {Object} selectData
+     * @param {Object} updateData
+     * @returns {Promise}
+     */
+    exsert: async function (selectData, updateData) {
+        const existingModel = await this.findOne(selectData);
+        if (existingModel) {
+            return await existingModel
+        } else {
+            return await new this(updateData).save();
+        }
+    },
+    /**
+     * @param {Object} selectData
+     * @param {Object} updateData
+     * @returns {Promise}
+     */
+    upsert: async function (selectData, updateData) {
+        const existingModel = await this.findOne(selectData);
+        if (existingModel) {
+            return await existingModel.set(updateData).save();
+        } else {
+            return await new this(updateData).save();
+        }
+    }
+})
+
 module.exports = bookshelf
+module.exports.BaseModel = BaseModel

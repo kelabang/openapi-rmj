@@ -10,5 +10,6 @@ const helper = {
 	JWT: require('./JWT'),
 	isEmail: require('./isEmail'),
 	MailChimp: require('./MailChimp'),
+	ISBN: require('./ISBN'),
 }
 module.exports = helper
