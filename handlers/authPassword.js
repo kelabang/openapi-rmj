@@ -23,7 +23,7 @@ let debug
 
 exports.handler = function authPassword(req, res, next) {
 
-	const name = getNameCaller()
+	const name = getNameCaller() 
 	debug = Debug('rumaji:'+name)
 
 	function modelQuery () {
