@@ -42,3 +42,7 @@ docloader(resolve(docpath))
 			debug('%s listening at %s', server.name, server.url)
 		})
 	})
+	.catch(err => {
+		console.info('server error when start');
+		console.log(err)
+	})

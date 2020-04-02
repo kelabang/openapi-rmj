@@ -25,7 +25,7 @@
   "author": "kelabang",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^1.0.3",
+    "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.1",
     "bookshelf": "^0.12.1",
     "checkit": "^0.7.0",
@@ -47,7 +47,6 @@
     "restify": "^6.3.4",
     "restify-cors-middleware": "^1.1.0",
     "restify-model": "^0.3.2",
-    "sqlite3": "^3.1.13",
     "swagger-parser": "^4.0.2",
     "swagger-routes": "^1.7.0",
     "urlencode": "^1.1.0"

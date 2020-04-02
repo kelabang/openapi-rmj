@@ -7,7 +7,7 @@
 
 const name = 'Tag'
 const debug = require('debug')('rumaji:'+name)
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const checkit = require('checkit')
 const Promise = require('bluebird')
 const _ = require('lodash')
