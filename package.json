@@ -6,6 +6,7 @@
   "scripts": {
     "test": "node test.js",
     "start-debug": "DEBUG=rumaji* node index.js",
+    "start-debug-es": "DEBUG=rumaji* nodemon --exec babel-node index.js",
     "start-debug-query": "DEBUG=knex:query node index.js",
     "start-debug-watch": "DEBUG=rumaji:* nodemon index.js --config nodemon.json",
     "start-debug-watch-windows": "set DEBUG=rumaji* &&  nodemon index.js --config nodemon.json",
@@ -52,7 +53,12 @@
     "urlencode": "^1.1.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.5",
+    "babel-preset-es2015": "^6.24.1",
     "debug": "^3.1.0",
+    "eslint": "^6.8.0",
     "nodemon": "^1.17.1"
   },
   "nodemonConfig": {

@@ -10,6 +10,7 @@ const debug = require('debug')('rumaji:'+name)
 const bcrypt = require('bcryptjs')
 const checkit = require('checkit')
 const Promise = require('bluebird')
+const moment = require('moment')
 const _ = require('lodash')
 
 const bookshelf = require('./../bookshelf')
@@ -39,15 +40,18 @@ User = bookshelf.Model.extend({
 			]
 			return pipeline(tasks)
 		})
-		this.on('updating', function (model, attrs, options) {
+		this.on('updating', function (model) {
 			debug('on updating')
 			model.set('updated', moment().format('YYYY-MM-DD HH:mm:ss'))
 		})
 		this.on('saving', function (model, attrs, options) {
 			debug('on saving')
 			return self._assertEmailUnique(model, attrs, options)
+				.catch(err => {
+					throw err
+				})
 		})
-		this.on('saved', function (model, response, options) {
+		this.on('saved', function () {
 			debug('on saved')
 			debug('remove password hash, prevent password exposed')
 
@@ -55,19 +59,19 @@ User = bookshelf.Model.extend({
 		})
 	},
 	_assertEmailUnique: function(model, attributes, options) {
-	    if (this.hasChanged('email')) {
-	    	debug('on email changing')
-			return User
+		if (this.hasChanged('email')) {
+			debug('on email changing')
+			return User	
 				.query('where', 'email', this.get('email'))
 				.fetch(_.pick(options || {}, 'transacting'))
 				.then(function(existing) {
-					debug('is email exist ? ', existing)
+					debug('is email exist ? ' + !!existing)
 					if (existing) {
-						debug('duplicate email existing')
-						throw new Error('Duplicated email: User id #' + existing.id);
+						debug('Duplicated email: User id #' + existing.id);
+						throw 'duplicate_email'
 					}
 				});
-	    }
+		}
 	},
 	_hash: function (password) {
 		debug('on low-level _hash')
@@ -86,7 +90,7 @@ User = bookshelf.Model.extend({
 			})
 		})
 	},
-	hashPassword: function (model, attrs, options) {
+	hashPassword: function (model) {
 		return this._hash(model.attributes.password)
 			.then(hash => {
 				model.set('password', hash)
@@ -118,8 +122,11 @@ User = bookshelf.Model.extend({
 		})
 		return user.save()
 		.then(user => {
-			debug('user ', user)
 			const user_id = user.get('id')
+
+			if(!ref_id || !ref_id || !ref_type) 
+				return user
+			
 			const usersoc = new UserSocial({
 				user_id: user_id,
 				social_id: ref_id,
@@ -128,7 +135,7 @@ User = bookshelf.Model.extend({
 
 			return usersoc
 				.save()
-				.then(resp => user)
+				.then(() => user)
 
 		})
 	},

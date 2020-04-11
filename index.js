@@ -23,6 +23,11 @@ const config = require('config-yml')[env]
 
 const docloader = require('./docloader')
 
+process.on('unhandledRejection', function(err){
+    console.log(err.stack);
+    process.exit(1);
+});
+
 const server = restify.createServer()
 
 server.pre(cors.preflight) // cors support preflight

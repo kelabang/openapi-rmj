@@ -3,12 +3,12 @@
  */
 
 const Debug = require('debug')
-const {createResponseHandler, JWT} = require('./../helper/index')
+const {JWT} = require('./../helper/index')
 const _JWT = JWT
 const pipeline = require('./../lib/promise/pipeline')
 const Token = require('./../models/Token')
 const name = 'security:JWT'
-debug = Debug('rumaji:'+name)
+let debug = Debug('rumaji:'+name)
 
 module.exports = function JWT(req, res, next) {
 
@@ -16,7 +16,6 @@ module.exports = function JWT(req, res, next) {
 
   const {headers} = req
   const {authorization} = headers
-  const user_agent = headers['user-agent']
   debug('is authorization exist ? ', authorization)
   if(!authorization) return unAuthorize()
   const token = (authorization.indexOf('Bearer ') > -1)?
@@ -30,20 +29,15 @@ module.exports = function JWT(req, res, next) {
   function isJWT () {
     // check if passed token is JWT
     debug('is token jwt ?', arguments)
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       try{
         const payload = _JWT.decode(token)
         if(!payload) throw new Error('cannot decode token')
-        debug('yes,')
-        debug('token payload ', payload)
+        debug('yes, token payload', payload)
         resolve(payload)
       }
       catch(err){
-        debug('no,')
-        debug('cannot decode token')
-        // reject(err)
-        // console.log(next)
-        // next(err)
+        debug('no, cannot decode token')
         unAuthorize()
       }
     })
@@ -52,7 +46,6 @@ module.exports = function JWT(req, res, next) {
 
   function modelQuery (payload) {
     debug('fetching token', arguments)
-    const {id, iat} = payload
     return new Token({
       user_id: payload.id,
       iat: payload.iat
@@ -67,9 +60,9 @@ module.exports = function JWT(req, res, next) {
       return unAuthorize()
     }
     const certificate_access_token = datatoken.get('certificate_access_token')
-    const private_access_token = datatoken.get('private_access_token')
+    // const private_access_token = datatoken.get('private_access_token')
     debug('trying verify token')
-    return new Promise((res, rej) => {
+    return new Promise((res) => {
       debug('certificate_access_token')
       _JWT.verify(token, certificate_access_token, function (err, data) {
         debug('verify token done')

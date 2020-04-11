@@ -16,7 +16,7 @@
  const _ =  require('lodash')
  const User = require('./../models/User')
  const pipeline = require('./../lib/promise/pipeline')
- const {createResponseHandler, getNameCaller} = require('./../helper/index')
+ const {createResponseHandler, getNameCaller, getSafely} = require('./../helper/index')
 
  let debug
 
@@ -26,7 +26,6 @@ exports.handler = function registerUser(req, res, next) {
 	debug = Debug('rumaji:'+name)
 
 	function modelQuery () {
-		try {
 			debug('user registering')
 			debug('incoming body ', req.body)
 			const {username, email, password, ref_id, ref_type} = req.body	
@@ -34,28 +33,67 @@ exports.handler = function registerUser(req, res, next) {
 			.catch(err => {
 				debug('catch in promise')
 				debug('user register failed')
-				console.error(err)
-				return err
+				if(err === 'duplicate_email') {
+					return {
+						error: err,
+						code: 400,
+						message: 'email already used'
+					}
+				}
+				return {
+					error: err, 
+					code: 400,
+					message: 'something is wrong'
+				}
 			})
-		}
-		catch(err) {
-			debug('user register failed')
-			console.error(err)
-			return false
-		}
 	}
 
 	function preResponseHandler (data) {
+		
 		debug('pre-response handler')
+		debug('content data ')
+		console.log(data)
+		let code = 201;
 
-		let code = 201
-		let toResponse = {name, code, data}
+		let toResponse = {
+			name: name,
+			code: code,
+			data: undefined,
+			error: undefined,
+			message: '',
+		};
+
+		toResponse.code = getSafely(function () {
+			return data.code;
+		}, code);
+	
+		toResponse.message = getSafely(function () {
+			return data.message
+		}, '');
+
+
+		if(data.error)
+			toResponse.error = getSafely(function () {
+				return data.error
+			}, '')
+
+		toResponse.data = getSafely(function () {
+			
+			delete data.code
+			delete data.message
+			delete data.error
+
+			return data
+
+		}, null);
+	
 		if(typeof data == 'boolean' && !data) _.assign(toResponse, {
 			code: 503, data: undefined
 		})
 		if(typeof data == 'object' && (data.errno || Object.keys(data).length == 0)) _.assign(toResponse, {
 			code: 400, data: undefined
 		})
+		debug(toResponse)
 		return toResponse
 	}
 
