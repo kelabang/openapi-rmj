@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node test.js",
-    "start-debug": "DEBUG=rumaji* node index.js",
+    "start-debug": "DEBUG=rumaji* node index.js --env development",
     "start-debug-es": "DEBUG=rumaji* nodemon --exec babel-node index.js",
     "start-debug-query": "DEBUG=knex:query node index.js",
     "start-debug-watch": "DEBUG=rumaji:* nodemon index.js --config nodemon.json",

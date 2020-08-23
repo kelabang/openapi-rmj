@@ -22,7 +22,7 @@
 let debug
 
 exports.handler = function authPassword(req, res, next) {
-
+	console.log('authPassword')
 	const name = getNameCaller() 
 	debug = Debug('rumaji:'+name)
 

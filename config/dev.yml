@@ -1,4 +1,4 @@
 dns: localhost
-port: 8080
+port: 8081
 app:
   url: http://${dns}:${port}
